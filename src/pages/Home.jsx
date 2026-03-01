@@ -11,7 +11,7 @@ const ICONS = { General: '📢', Policy: '📋', Community: '👥', Environment:
 export default function Home() {
     const { isConnected, address } = useAccount()
 
-    const { data: ids } = useReadContract({
+    const { data: ids, isLoading: loadingIds } = useReadContract({
         address: contractConfig?.address,
         abi: TenderVotingABI,
         functionName: 'getActiveTenders',
@@ -82,7 +82,7 @@ export default function Home() {
             </section>
 
             {/* Featured Campaigns */}
-            {isConnected && ids && ids.length > 0 && (
+            {isConnected && (
                 <section style={{ padding: '60px 24px', background: 'rgba(15, 23, 42, 0.3)' }}>
                     <div className="container">
                         <h2 style={{ textAlign: 'center', fontSize: '32px', fontWeight: '700', marginBottom: '12px' }}>
@@ -91,12 +91,26 @@ export default function Home() {
                         <p style={{ textAlign: 'center', color: 'rgba(148, 163, 184, 0.6)', marginBottom: '40px' }}>
                             Active, upcoming, and completed campaigns
                         </p>
-                        <FeaturedCampaignsGrid ids={ids} userAddress={address} />
-                        <div style={{ textAlign: 'center', marginTop: '32px' }}>
-                            <Link to="/browse" className="btn btn-secondary" style={{ padding: '14px 32px' }}>
-                                View All Campaigns <FiArrowRight />
-                            </Link>
-                        </div>
+                        {loadingIds ? (
+                            <div style={{ textAlign: 'center', padding: '60px' }}>
+                                <div className="spinner" style={{ margin: '0 auto 16px' }}></div>
+                                <p style={{ color: 'rgba(148, 163, 184, 0.6)' }}>Loading campaigns...</p>
+                            </div>
+                        ) : ids && ids.length > 0 ? (
+                            <>
+                                <FeaturedCampaignsGrid ids={ids} userAddress={address} />
+                                <div style={{ textAlign: 'center', marginTop: '32px' }}>
+                                    <Link to="/browse" className="btn btn-secondary" style={{ padding: '14px 32px' }}>
+                                        View All Campaigns <FiArrowRight />
+                                    </Link>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="card" style={{ padding: '40px', textAlign: 'center' }}>
+                                <p style={{ color: 'rgba(148, 163, 184, 0.6)', marginBottom: '16px' }}>No campaigns yet</p>
+                                <Link to="/create" className="btn btn-primary">Launch the first one</Link>
+                            </div>
+                        )}
                     </div>
                 </section>
             )}
