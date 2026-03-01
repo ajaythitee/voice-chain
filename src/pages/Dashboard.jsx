@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useAccount, useReadContract } from 'wagmi'
-import { FiGrid, FiClock, FiArrowRight } from 'react-icons/fi'
+import { FiClock, FiArrowRight } from 'react-icons/fi'
 import Timer from '../components/Timer'
 import contractConfig from '../contractConfig.json'
 import TenderVotingABI from '../TenderVotingABI.json'
