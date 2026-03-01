@@ -4,6 +4,7 @@ import { useAccount } from 'wagmi'
 import toast from 'react-hot-toast'
 import { FiStar, FiUpload, FiCheck, FiLoader, FiFile, FiX, FiCalendar, FiPlus, FiZap } from 'react-icons/fi'
 import { improveTitle, improveDescription, parseAddressesFromFile, suggestOptions, isAIConfigured } from '../services/ai'
+import { formatAddress } from '../utils'
 import { uploadFile, uploadJSON, isPinataConfigured } from '../services/ipfs'
 import { createTenderGasless, isRelayerConfigured } from '../services/relayer'
 
@@ -413,7 +414,7 @@ export default function Create() {
                                 <div style={{ maxHeight: '120px', overflowY: 'auto', background: 'rgba(15, 23, 42, 0.5)', borderRadius: '10px', padding: '10px' }}>
                                     {whitelist.map((addr, i) => (
                                         <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '4px 8px', fontSize: '12px', fontFamily: 'monospace' }}>
-                                            <span>{addr.slice(0, 8)}...{addr.slice(-6)}</span>
+                                            <span>{formatAddress(addr)}</span>
                                             <button type="button" onClick={() => removeAddress(addr)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}><FiX /></button>
                                         </div>
                                     ))}
