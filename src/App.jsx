@@ -137,6 +137,11 @@ function NetworkBanner() {
 
     return (
         <div style={{
+            position: 'fixed',
+            top: 73,
+            left: 0,
+            right: 0,
+            zIndex: 99,
             background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(245, 158, 11, 0.2))',
             borderBottom: '1px solid rgba(239, 68, 68, 0.3)',
             padding: '12px 24px',
@@ -176,7 +181,7 @@ export default function App() {
                 <Toaster position="top-right" toastOptions={{ style: { background: '#1e293b', color: '#fff', borderRadius: '12px' } }} />
                 <NetworkBanner />
                 <Navigation />
-                <main style={{ flex: 1, paddingTop: '80px' }}>
+                <main style={{ flex: 1, paddingTop: '120px' }}>
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/create" element={<Create />} />
