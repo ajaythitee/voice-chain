@@ -8,6 +8,7 @@ import { voteWithSignature, voteDirect, isRelayerConfigured } from '../services/
 import { generateVoteAnalysis, isAIConfigured } from '../services/ai'
 import contractConfig from '../contractConfig.json'
 import TenderVotingABI from '../TenderVotingABI.json'
+import { formatAddress, formatDate } from '../utils'
 
 export default function Campaign() {
     const { id } = useParams()
@@ -168,10 +169,7 @@ export default function Campaign() {
         setVoting(false)
     }
 
-    const formatTime = (ts) => {
-        const date = new Date(Number(ts) * 1000)
-        return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    }
+    const formatTime = (ts) => formatDate(ts)
 
     const copyShareLink = () => {
         const url = window.location.href
@@ -291,7 +289,7 @@ export default function Campaign() {
                                                 {votersForOption.map((v, j) => (
                                                     <div key={j} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'rgba(15, 23, 42, 0.5)', borderRadius: '8px', fontSize: '13px' }}>
                                                         <span style={{ fontFamily: 'monospace', color: 'rgba(148, 163, 184, 0.8)' }}>
-                                                            {v.isAnon ? '🕶️ Anonymous' : `${v.address.slice(0, 8)}...${v.address.slice(-6)}`}
+                                                            {v.isAnon ? '🕶️ Anonymous' : formatAddress(v.address)}
                                                         </span>
                                                         <span style={{ color: 'rgba(148, 163, 184, 0.5)' }}>{formatTime(v.timestamp)}</span>
                                                     </div>
@@ -394,7 +392,7 @@ export default function Campaign() {
                                 <div key={i} style={{ padding: '16px', background: 'rgba(15, 23, 42, 0.5)', borderRadius: '12px', borderLeft: `3px solid ${color}` }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '13px' }}>
                                         <span style={{ color: 'rgba(148, 163, 184, 0.6)', fontFamily: 'monospace' }}>
-                                            {isAnon ? '🕶️ Anonymous' : showVoter ? `${voter.slice(0, 8)}...${voter.slice(-6)}` : '👤 Voter'}
+                                            {isAnon ? '🕶️ Anonymous' : showVoter ? formatAddress(voter) : '👤 Voter'}
                                         </span>
                                         <span style={{ color: 'rgba(148, 163, 184, 0.5)' }}>{formatTime(timestamps[i])}</span>
                                     </div>

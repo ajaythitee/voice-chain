@@ -2,6 +2,8 @@ const JWT = import.meta.env.VITE_PINATA_JWT
 const GATEWAY = import.meta.env.VITE_PINATA_GATEWAY || 'https://gateway.pinata.cloud'
 
 export async function uploadFile(file) {
+    if (!JWT) throw new Error('Pinata not configured. Add VITE_PINATA_JWT to .env')
+
     const formData = new FormData()
     formData.append('file', file)
 
@@ -12,6 +14,8 @@ export async function uploadFile(file) {
     })
 
     const data = await res.json()
+    if (data.error) throw new Error(data.error || 'IPFS upload failed')
+    if (!data.IpfsHash) throw new Error('No hash returned from IPFS')
     return { hash: data.IpfsHash, url: `${GATEWAY}/ipfs/${data.IpfsHash}` }
 }
 
