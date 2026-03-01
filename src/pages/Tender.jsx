@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useAccount, useReadContract, useWalletClient, useSignMessage } from 'wagmi'
 import toast from 'react-hot-toast'
-import { FiArrowLeft, FiClock, FiExternalLink, FiLoader, FiMessageSquare, FiUsers, FiEyeOff, FiBarChart2, FiChevronDown, FiChevronUp } from 'react-icons/fi'
+import { FiArrowLeft, FiClock, FiExternalLink, FiLoader, FiMessageSquare, FiUsers, FiEyeOff, FiBarChart2, FiChevronDown, FiChevronUp, FiShare2 } from 'react-icons/fi'
 import Timer from '../components/Timer'
 import { voteWithSignature, voteDirect, isRelayerConfigured } from '../services/relayer'
 import { generateVoteAnalysis, isAIConfigured } from '../services/ai'
@@ -173,13 +173,23 @@ export default function Campaign() {
         return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
 
+    const copyShareLink = () => {
+        const url = window.location.href
+        navigator.clipboard.writeText(url).then(() => toast.success('Link copied!')).catch(() => toast.error('Failed to copy'))
+    }
+
     const colors = ['#10b981', '#ef4444', '#f59e0b', '#3b82f6', '#8b5cf6', '#ec4899']
 
     return (
         <div className="container fade-in" style={{ padding: '60px 24px', maxWidth: '900px' }}>
-            <Link to="/browse" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#a855f7', textDecoration: 'none', marginBottom: '24px' }}>
-                <FiArrowLeft /> Back to Campaigns
-            </Link>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
+                <Link to="/browse" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#a855f7', textDecoration: 'none' }}>
+                    <FiArrowLeft /> Back to Campaigns
+                </Link>
+                <button onClick={copyShareLink} className="btn btn-secondary" style={{ padding: '10px 18px', fontSize: '14px' }}>
+                    <FiShare2 /> Share
+                </button>
+            </div>
 
             {imageHash && (
                 <div style={{ marginBottom: '24px', borderRadius: '16px', overflow: 'hidden' }}>
