@@ -3,6 +3,7 @@ import { useAccount, useConnect, useDisconnect, useChainId } from 'wagmi'
 import { formatAddress } from './utils'
 import { FiHome, FiGrid, FiPlusCircle, FiUser, FiLogOut, FiMenu, FiX } from 'react-icons/fi'
 import { useState } from 'react'
+import toast from 'react-hot-toast'
 import { Toaster } from 'react-hot-toast'
 
 import Home from './pages/Home'
@@ -80,16 +81,22 @@ function Navigation() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }} className="header-actions">
                     {isConnected ? (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <span style={{
-                                padding: '8px 14px',
-                                borderRadius: '10px',
-                                background: 'rgba(168, 85, 247, 0.15)',
-                                color: '#a855f7',
-                                fontSize: '13px',
-                                fontFamily: 'monospace'
-                            }}>
+                            <button
+                                onClick={() => navigator.clipboard.writeText(address).then(() => toast.success('Address copied!')).catch(() => toast.error('Failed to copy'))}
+                                style={{
+                                    padding: '8px 14px',
+                                    borderRadius: '10px',
+                                    background: 'rgba(168, 85, 247, 0.15)',
+                                    color: '#a855f7',
+                                    fontSize: '13px',
+                                    fontFamily: 'monospace',
+                                    border: 'none',
+                                    cursor: 'pointer'
+                                }}
+                                title="Copy address"
+                            >
                                 {formatAddress(address)}
-                            </span>
+                            </button>
                             <button onClick={() => disconnect()} className="btn btn-secondary" style={{ padding: '8px 14px', fontSize: '13px' }}>
                                 <FiLogOut /> Disconnect
                             </button>

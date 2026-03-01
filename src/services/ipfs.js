@@ -20,6 +20,8 @@ export async function uploadFile(file) {
 }
 
 export async function uploadJSON(json) {
+    if (!JWT) throw new Error('Pinata not configured. Add VITE_PINATA_JWT to .env')
+
     const res = await fetch('https://api.pinata.cloud/pinning/pinJSONToIPFS', {
         method: 'POST',
         headers: {
@@ -30,6 +32,8 @@ export async function uploadJSON(json) {
     })
 
     const data = await res.json()
+    if (data.error) throw new Error(data.error || 'IPFS upload failed')
+    if (!data.IpfsHash) throw new Error('No hash returned from IPFS')
     return { hash: data.IpfsHash, url: `${GATEWAY}/ipfs/${data.IpfsHash}` }
 }
 
