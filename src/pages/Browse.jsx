@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAccount, useReadContract } from 'wagmi'
-import { FiSearch, FiClock, FiArrowRight, FiImage } from 'react-icons/fi'
+import { FiSearch, FiClock, FiX } from 'react-icons/fi'
 import Timer from '../components/Timer'
 import contractConfig from '../contractConfig.json'
 import TenderVotingABI from '../TenderVotingABI.json'
@@ -38,8 +38,27 @@ export default function Browse() {
 
             <div className="card" style={{ padding: '20px', marginBottom: '32px', display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
                 <div style={{ position: 'relative', flex: 1, minWidth: '200px' }}>
-                    <FiSearch style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(148, 163, 184, 0.5)' }} />
-                    <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search campaigns..." style={{ paddingLeft: '44px' }} />
+                    <FiSearch style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'rgba(148, 163, 184, 0.5)', pointerEvents: 'none' }} />
+                    <input
+                        value={search}
+                        onChange={e => setSearch(e.target.value)}
+                        onKeyDown={e => e.key === 'Escape' && setSearch('')}
+                        placeholder="Search campaigns..."
+                        style={{ paddingLeft: '44px', paddingRight: search ? '44px' : '20px' }}
+                    />
+                    {search && (
+                        <button
+                            onClick={() => setSearch('')}
+                            aria-label="Clear search"
+                            style={{
+                                position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)',
+                                background: 'rgba(148, 163, 184, 0.2)', border: 'none', borderRadius: '8px',
+                                color: 'rgba(148, 163, 184, 0.8)', padding: '6px', cursor: 'pointer'
+                            }}
+                        >
+                            <FiX size={16} />
+                        </button>
+                    )}
                 </div>
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                     {CATEGORIES.map(c => (
