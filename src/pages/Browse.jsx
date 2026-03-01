@@ -60,7 +60,7 @@ export default function Browse() {
                         </button>
                     )}
                 </div>
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
                     {CATEGORIES.map(c => (
                         <button key={c} onClick={() => setCategory(c)} style={{
                             padding: '10px 18px', borderRadius: '10px', border: 'none', fontWeight: '500', cursor: 'pointer',
@@ -68,6 +68,12 @@ export default function Browse() {
                             color: category === c ? '#fff' : 'rgba(148, 163, 184, 0.8)'
                         }}>{c}</button>
                     ))}
+                    {(search || category !== 'All') && (
+                        <button onClick={() => { setSearch(''); setCategory('All') }} style={{
+                            padding: '8px 14px', borderRadius: '8px', border: '1px solid rgba(148, 163, 184, 0.3)',
+                            background: 'transparent', color: 'rgba(148, 163, 184, 0.8)', fontSize: '13px', cursor: 'pointer'
+                        }}><FiX size={14} /> Clear filters</button>
+                    )}
                 </div>
             </div>
 
