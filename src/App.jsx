@@ -1,7 +1,6 @@
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { FiHome, FiGrid, FiPlusCircle, FiUser, FiLogOut, FiMenu, FiX } from 'react-icons/fi'
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { Toaster } from 'react-hot-toast'
 
@@ -67,7 +66,15 @@ function Navigation() {
                     ))}
                 </nav>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <button
+                    className="mobile-menu-btn"
+                    onClick={() => setMobileOpen(!mobileOpen)}
+                    aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+                >
+                    {mobileOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+                </button>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }} className="header-actions">
                     {isConnected ? (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                             <span style={{
@@ -90,6 +97,22 @@ function Navigation() {
                         </button>
                     )}
                 </div>
+            </div>
+
+            {/* Mobile menu overlay */}
+            <div className={`mobile-nav-overlay ${mobileOpen ? 'open' : ''}`} onClick={() => setMobileOpen(false)}>
+                <nav className="mobile-nav" onClick={e => e.stopPropagation()}>
+                    {navLinks.map(link => (
+                        <Link
+                            key={link.path}
+                            to={link.path}
+                            onClick={() => setMobileOpen(false)}
+                            className={isActive(link.path) ? 'active' : ''}
+                        >
+                            {link.icon} {link.label}
+                        </Link>
+                    ))}
+                </nav>
             </div>
         </header>
     )
