@@ -8,14 +8,14 @@ import TenderVotingABI from '../TenderVotingABI.json'
 export default function Dashboard() {
     const { address, isConnected } = useAccount()
 
-    const { data: myTenders } = useReadContract({
+    const { data: myTenders, isLoading: loadingTenders } = useReadContract({
         address: contractConfig?.address,
         abi: TenderVotingABI,
         functionName: 'getOrganizationTenders',
         args: [address],
     })
 
-    const { data: votingHistory } = useReadContract({
+    const { data: votingHistory, isLoading: loadingHistory } = useReadContract({
         address: contractConfig?.address,
         abi: TenderVotingABI,
         functionName: 'getVoterHistory',
@@ -45,7 +45,12 @@ export default function Dashboard() {
                     <Link to="/create" className="btn btn-primary" style={{ padding: '10px 20px' }}>+ Create</Link>
                 </div>
 
-                {myTenders && myTenders.length > 0 ? (
+                {loadingTenders ? (
+                    <div className="card" style={{ padding: '60px', textAlign: 'center' }}>
+                        <div className="spinner" style={{ margin: '0 auto 16px' }}></div>
+                        <p style={{ color: 'rgba(148, 163, 184, 0.6)' }}>Loading campaigns...</p>
+                    </div>
+                ) : myTenders && myTenders.length > 0 ? (
                     <div className="grid grid-3">
                         {myTenders.map(id => <CampaignCard key={id.toString()} id={id} userAddress={address} />)}
                     </div>
@@ -61,7 +66,12 @@ export default function Dashboard() {
             <section>
                 <h2 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '24px' }}>🗳️ Voting History</h2>
 
-                {votingHistory && votingHistory.length > 0 ? (
+                {loadingHistory ? (
+                    <div className="card" style={{ padding: '60px', textAlign: 'center' }}>
+                        <div className="spinner" style={{ margin: '0 auto 16px' }}></div>
+                        <p style={{ color: 'rgba(148, 163, 184, 0.6)' }}>Loading history...</p>
+                    </div>
+                ) : votingHistory && votingHistory.length > 0 ? (
                     <div className="grid grid-3">
                         {votingHistory.map(id => <HistoryCard key={id.toString()} id={id} />)}
                     </div>

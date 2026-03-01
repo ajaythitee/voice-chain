@@ -321,6 +321,25 @@ export default function Create() {
 
                     <div>
                         <div style={{ fontSize: '14px', fontWeight: '500', marginBottom: '12px' }}>🔴 End (Required)</div>
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '12px' }}>
+                            {[
+                                { label: '3 days', days: 3 },
+                                { label: '1 week', days: 7 },
+                                { label: '2 weeks', days: 14 },
+                                { label: '1 month', days: 30 },
+                            ].map(({ label, days }) => {
+                                const d = new Date()
+                                d.setDate(d.getDate() + days)
+                                const dateStr = d.toISOString().split('T')[0]
+                                const timeStr = '23:59'
+                                return (
+                                    <button key={label} type="button" onClick={() => setForm({ ...form, endDate: dateStr, endTime: timeStr })} style={{
+                                        padding: '6px 14px', borderRadius: '8px', border: '1px solid rgba(168, 85, 247, 0.3)',
+                                        background: 'rgba(168, 85, 247, 0.1)', color: '#a855f7', fontSize: '13px', cursor: 'pointer'
+                                    }}>{label}</button>
+                                )
+                            })}
+                        </div>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                             <div>
                                 <label style={{ display: 'block', marginBottom: '8px', fontSize: '13px', color: 'rgba(148, 163, 184, 0.6)' }}>End Date *</label>
@@ -349,10 +368,17 @@ export default function Create() {
                 <div className="card" style={{ padding: '32px', marginBottom: '24px' }}>
                     <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '24px' }}>🖼️ Cover Image (Optional)</h3>
                     <input type="file" ref={imageInputRef} accept="image/*" onChange={handleImage} style={{ display: 'none' }} />
-                    <div onClick={() => imageInputRef.current?.click()} style={{ padding: '40px', border: '2px dashed rgba(148, 163, 184, 0.2)', borderRadius: '14px', textAlign: 'center', cursor: 'pointer' }}>
-                        {preview ? <img src={preview} alt="Preview" style={{ maxHeight: '200px', maxWidth: '100%', borderRadius: '10px' }} /> : (
-                            <><FiUpload style={{ fontSize: '32px', marginBottom: '12px', color: 'rgba(148, 163, 184, 0.5)' }} /><p style={{ color: 'rgba(148, 163, 184, 0.5)' }}>Click to upload</p></>
-                        )}
+                    <div style={{ position: 'relative' }}>
+                        <div onClick={() => !preview && imageInputRef.current?.click()} style={{ padding: '40px', border: '2px dashed rgba(148, 163, 184, 0.2)', borderRadius: '14px', textAlign: 'center', cursor: preview ? 'default' : 'pointer' }}>
+                            {preview ? (
+                                <>
+                                    <img src={preview} alt="Preview" style={{ maxHeight: '200px', maxWidth: '100%', borderRadius: '10px' }} />
+                                    <button type="button" onClick={() => { setImage(null); setPreview(null) }} style={{ marginTop: '12px', padding: '8px 16px', borderRadius: '8px', border: 'none', background: 'rgba(239, 68, 68, 0.2)', color: '#ef4444', cursor: 'pointer', fontSize: '14px' }}><FiX /> Remove</button>
+                                </>
+                            ) : (
+                                <><FiUpload style={{ fontSize: '32px', marginBottom: '12px', color: 'rgba(148, 163, 184, 0.5)' }} /><p style={{ color: 'rgba(148, 163, 184, 0.5)' }}>Click to upload</p></>
+                            )}
+                        </div>
                     </div>
                 </div>
 
