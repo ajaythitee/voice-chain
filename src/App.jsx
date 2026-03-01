@@ -1,5 +1,6 @@
 import { Link, Navigate, BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import { useAccount, useConnect, useDisconnect, useChainId } from 'wagmi'
+import { formatAddress } from './utils'
 import { FiHome, FiGrid, FiPlusCircle, FiUser, FiLogOut, FiMenu, FiX } from 'react-icons/fi'
 import { useState } from 'react'
 import { Toaster } from 'react-hot-toast'
@@ -9,6 +10,8 @@ import Create from './pages/Create'
 import Browse from './pages/Browse'
 import Campaign from './pages/Tender'
 import Dashboard from './pages/Dashboard'
+
+const POLYGON_AMOY_CHAIN_ID = 80002
 
 function Navigation() {
     const { address, isConnected } = useAccount()
@@ -85,7 +88,7 @@ function Navigation() {
                                 fontSize: '13px',
                                 fontFamily: 'monospace'
                             }}>
-                                {address?.slice(0, 6)}...{address?.slice(-4)}
+                                {formatAddress(address)}
                             </span>
                             <button onClick={() => disconnect()} className="btn btn-secondary" style={{ padding: '8px 14px', fontSize: '13px' }}>
                                 <FiLogOut /> Disconnect
@@ -118,6 +121,27 @@ function Navigation() {
     )
 }
 
+function NetworkBanner() {
+    const { isConnected } = useAccount()
+    const chainId = useChainId()
+    const wrongNetwork = isConnected && chainId !== POLYGON_AMOY_CHAIN_ID
+
+    if (!wrongNetwork) return null
+
+    return (
+        <div style={{
+            background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(245, 158, 11, 0.2))',
+            borderBottom: '1px solid rgba(239, 68, 68, 0.3)',
+            padding: '12px 24px',
+            textAlign: 'center',
+            fontSize: '14px',
+            color: '#fca5a5'
+        }}>
+            ⚠️ Wrong network. Please switch to <strong>Polygon Amoy</strong> in your wallet.
+        </div>
+    )
+}
+
 function Footer() {
     return (
         <footer style={{
@@ -143,6 +167,7 @@ export default function App() {
         <BrowserRouter>
             <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
                 <Toaster position="top-right" toastOptions={{ style: { background: '#1e293b', color: '#fff', borderRadius: '12px' } }} />
+                <NetworkBanner />
                 <Navigation />
                 <main style={{ flex: 1, paddingTop: '80px' }}>
                     <Routes>
